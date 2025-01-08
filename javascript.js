@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //default values
 let setting = "color"
+let mouseDown = false
 
 
 //buttons/container
@@ -26,17 +27,25 @@ function createGrid(size){
         gridSquare.style.width = `${gridSquareSize}px`
         gridSquare.style.backgroundColor= "white"
         
-    gridSquare.addEventListener("mouseover", () =>{
+    gridSquare.addEventListener("mousedown", () =>{
+        mouseDown = true
         changeColor(gridSquare)
+    })
+    gridSquare.addEventListener("mouseover", () =>{
+        if (mouseDown){
+            changeColor(gridSquare)
+        }
+        
+    })
+   gridSquare.addEventListener("mouseup", () =>{
+        mouseDown = false
     })
 
     container.appendChild(gridSquare)
-    }
-
-    
+    } 
 }
 
-// button event listeners
+// event listeners
 colorBtn.addEventListener("click", () => {
     setting = "color"
 })
@@ -53,9 +62,14 @@ resetBtn.addEventListener("click", () => {
     createGrid(16)
 })
 gridSizeBtn.addEventListener("click", () => {
-    const newSize = parseInt(prompt("Enter a new grid size between 4 & 64: "));
-    createGrid(newSize)
-})
+    const newSize = parseInt(prompt('Enter a new grid size (between 4 & 64):', 16), 10);
+        if (Number.isInteger(newSize) && newSize >= 4 && newSize <= 64){
+            createGrid(newSize);
+        } else{
+            alert('Please enter a valid number between 4 & 64');
+        }
+
+    })
 
 //functions for buttons
 function changeColor(gridSquare){
